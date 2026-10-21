@@ -112,3 +112,29 @@ Ao finalizar todas as etapas de testes e validações deste Home Lab, consolidei
 * **Análise de Logs Corporativos:** Habilidade de instrumentar auditorias visuais utilizando `cat`, `tail -f` e filtros complexos de busca de strings para monitoramento de acordos de entrega (SLAs).
 * **Resolução de Conflitos sob Pressão:** Investigação analítica profunda de incidentes silenciosos de ambiente de servidores.
 
+
+---
+
+
+## 🧹 Encerramento do Laboratório & Desativação da Automação
+
+Em ambientes corporativos de TI, a governança exige que rotinas de testes ou laboratórios temporários sejam completamente desativadas e limpas após a homologação para evitar o consumo desnecessário de hardware e armazenamento.
+
+Para encerrar este laboratório no servidor Ubuntu e impedir que o robô continue gerando arquivos de logs indefinidamente, o agendador foi completamente limpo utilizando o comando de remoção:
+
+```bash
+crontab -r
+```
+
+### 🎯 Validação do Desligamento
+Para auditar e confirmar que o daemon do `cron` não possui mais nenhuma tarefa pendente em segundo plano, executou-se o comando de listagem:
+
+```bash
+crontab -l
+```
+
+O sistema operacional retornou com sucesso a confirmação de que a tabela de tarefas foi purgada e o ambiente limpo de forma definitiva:
+
+![Validação de encerramento do crontab](assets/limpeza_cron_limpo.png)
+
+Com esta etapa concluída, o ciclo de vida do Home Lab está oficialmente encerrado e o servidor purgado de tarefas temporárias.

@@ -78,3 +78,34 @@ echo "Transacao_01;Valor:350.00;Status:Pendente" > ~/input/carga_vendas.txt
 * **Gestão e Monitoramento de Processos de TI:** Utilização prática de fluxos de entrada e saída voltados para engenharia de sustentação de sistemas críticos.
 * **Troubleshooting Sob Pressão:** Investigação detalhada de travamentos, gargalos de permissão ou falhas de gravação ocultas usando parâmetros de debug estruturados no terminal (`bash -x`).
 * **Sintaxe Rigorosa de Shell Script:** Manipulação correta de variáveis de ambiente, tratamento de erros silenciosos (`2>/dev/null`) e controle estrito de formatação de strings e carimbos de data/hora (`date`).
+
+
+---
+
+
+## 🛠️ Diário de Bordo: Engenharia de Sustentação & Troubleshooting
+
+Em um ambiente de produção real de TI, nem tudo funciona perfeitamente de primeira. Durante a implantação deste laboratório, foram simulados e corrigidos problemas clássicos de infraestrutura que servem como guia prático de sobrevivência para um Operador de Produção.
+
+### 🔍 Incidente 1: O Script roda manualmente, mas o Crontab falha silenciosamente
+* **Sintoma:** O comando `~/processador_batch.sh` exibia a execução na tela, mas ao deixar o ambiente rodando sozinho, o arquivo `execucao_batch.log` não recebia novas linhas.
+* **Investigação Técnica:** Foi utilizado o comando de auditoria e rastreamento de variáveis `bash -x ~/processador_batch.sh`. Descobriu-se que o serviço do `cron` trabalha em segundo plano em um shell minimalista e não consegue interpretar variáveis dinâmicas de usuário como `/home/$USER/`.
+* **Solução Implementada:** Aplicação de **Boas Práticas de Infraestrutura**, substituindo caminhos relativos ou variáveis flutuantes por caminhos absolutos e globais do sistema operacional (utilizando `$HOME` ou mapeando diretamente a árvore de diretórios fixa do servidor `/home/thiago-pr/`).
+
+### 📝 Incidente 2: Falha de Leitura/Sintaxe do Agendador
+* **Sintoma:** Mesmo com a sintaxe de tempo perfeita (`*/2 * * * *`), o daemon do Cron ignorava o gatilho de execução.
+* **Causa Raiz:** O daemon do `cron` lê os arquivos de configuração linha por linha e exige estritamente uma quebra de linha (uma linha em branco) logo após o último comando do arquivo para validar a leitura da tabela de tarefas.
+* **Solução Implementada:** Edição rigorosa via `crontab -e`, inserção do caractere de quebra de linha no final do arquivo e reinício forçado do serviço utilizando os comandos de controle de estado de processos do Systemd:
+  ```bash
+  sudo systemctl restart cron
+  ```
+
+---
+
+## 🔥 Checklist de Aprendizado Concluído
+Ao finalizar todas as etapas de testes e validações deste Home Lab, consolidei competências críticas exigidas no dia a dia da sustentação de TI:
+* **Ambientes Automatizados:** Domínio na criação, gerenciamento e modificação de tarefas em lote recorrentes via Crontab Linux.
+* **Tratamento de Erros e Sintaxe:** Manipulação precisa de Shell Scripting no terminal, corrigindo loops, permissões de escrita em disco (`chmod`/`chown`) e fluxos lógicos com tratamento de erros ocultos (`2>/dev/null`).
+* **Análise de Logs Corporativos:** Habilidade de instrumentar auditorias visuais utilizando `cat`, `tail -f` e filtros complexos de busca de strings para monitoramento de acordos de entrega (SLAs).
+* **Resolução de Conflitos sob Pressão:** Investigação analítica profunda de incidentes silenciosos de ambiente de servidores.
+

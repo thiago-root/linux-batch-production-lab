@@ -95,15 +95,18 @@ Em um ambiente de produção real de TI, nem tudo funciona perfeitamente de prim
 ### 📝 Incidente 2: Falha de Leitura/Sintaxe do Agendador
 * **Sintoma:** Mesmo com a sintaxe de tempo perfeita (`*/2 * * * *`), o daemon do Cron ignorava o gatilho de execução.
 * **Causa Raiz:** O daemon do `cron` lê os arquivos de configuração linha por linha e exige estritamente uma quebra de linha (uma linha em branco) logo após o último comando do arquivo para validar a leitura da tabela de tarefas.
-* **Solução Implementada:** Edição rigorosa via `crontab -e`, inserção do caractere de quebra de linha no final do arquivo e reinício forçado do serviço utilizando os comandos de controle de estado de processos do Systemd:
-  ```bash
-  sudo systemctl restart cron
-  ```
+* **Solução Implementada:** Edição rigorosa via `crontab -e`, inserção do caractere de quebra de linha no final do arquivo e reinício forçado do serviço. Após o ajuste, a auditoria via `cat` comprovou a regularidade dos disparos automáticos minuto a minuto:
+
+![Auditoria de disparos do Crontab](assets/cron_ajustado.png)
 
 ---
 
-## 🔥 Checklist de Aprendizado Concluído
-Ao finalizar todas as etapas de testes e validações deste Home Lab, consolidei competências críticas exigidas no dia a dia da sustentação de TI:
+## 🔥 Checklist de Aprendizado Concluído e Validação Final
+
+Ao finalizar todas as etapas de testes e validações deste Home Lab, consolidei competências críticas exigidas no dia a dia da sustentação de TI. Abaixo, a evidência final do ecossistema funcionando de forma autônoma, capturando o arquivo `carga_operador.txt`, processando a janela batch com sucesso (`[SUCCESS]`) e limpando o diretório de entrada para cumprir o SLA operacional:
+
+![Validação final de sucesso e limpeza da esteira](assets/carga_sucesso_total.png)
+
 * **Ambientes Automatizados:** Domínio na criação, gerenciamento e modificação de tarefas em lote recorrentes via Crontab Linux.
 * **Tratamento de Erros e Sintaxe:** Manipulação precisa de Shell Scripting no terminal, corrigindo loops, permissões de escrita em disco (`chmod`/`chown`) e fluxos lógicos com tratamento de erros ocultos (`2>/dev/null`).
 * **Análise de Logs Corporativos:** Habilidade de instrumentar auditorias visuais utilizando `cat`, `tail -f` e filtros complexos de busca de strings para monitoramento de acordos de entrega (SLAs).

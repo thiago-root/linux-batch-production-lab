@@ -1,0 +1,24 @@
+#!/bin/bash
+
+LOG_FILE="/home/thiago-pr/logs/execucao_batch.log"
+INPUT_DIR="/home/thiago-pr/logs"
+OUTPUT_DIR="/home/thiago-pr/output"
+
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] [INFO] Iniciando ciclo de processamento Batch..." >> "$LOG_FILE"
+
+# Verifica se existem arquivos .txt na pasta input
+if [ -n "$(ls -A /home/thiago-pr/input/*.txt 2>/dev/null)" ]; then
+    for arquivo in /home/thiago-pr/input/*.txt; do
+        nome_arquivo=$(basename "$arquivo")
+        echo "[$(date '+%Y-%m-%d %H:%M:%S')] [INFO] Processando o arquivo: $nome_arquivo" >> "$LOG_FILE"
+        
+        sleep 3
+        
+        mv "$arquivo" /home/thiago-pr/output/
+        echo "[$(date '+%Y-%m-%d %H:%M:%S')] [SUCCESS] Arquivo $nome_arquivo processado com sucesso." >> "$LOG_FILE"
+    done
+else
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [WARNING] Nenhum arquivo encontrado para processamento nesta janela." >> "$LOG_FILE"
+fi
+
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] [INFO] Ciclo Batch finalizado." >> "$LOG_FILE"

@@ -1,20 +1,20 @@
 #!/bin/bash
 
-LOG_FILE="/home/thiago-pr/logs/execucao_batch.log"
-INPUT_DIR="/home/thiago-pr/logs"
-OUTPUT_DIR="/home/thiago-pr/output"
+LOG_FILE="$HOME/logs/execucao_batch.log"
+INPUT_DIR="$HOME/input"
+OUTPUT_DIR="$HOME/output"
 
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] [INFO] Iniciando ciclo de processamento Batch..." >> "$LOG_FILE"
 
 # Verifica se existem arquivos .txt na pasta input
-if [ -n "$(ls -A /home/thiago-pr/input/*.txt 2>/dev/null)" ]; then
-    for arquivo in /home/thiago-pr/input/*.txt; do
+if [ -n "$(ls -A "$INPUT_DIR"/*.txt 2>/dev/null)" ]; then
+    for arquivo in "$INPUT_DIR"/*.txt; do
         nome_arquivo=$(basename "$arquivo")
         echo "[$(date '+%Y-%m-%d %H:%M:%S')] [INFO] Processando o arquivo: $nome_arquivo" >> "$LOG_FILE"
         
         sleep 3
         
-        mv "$arquivo" /home/thiago-pr/output/
+        mv "$arquivo" "$OUTPUT_DIR/"
         echo "[$(date '+%Y-%m-%d %H:%M:%S')] [SUCCESS] Arquivo $nome_arquivo processado com sucesso." >> "$LOG_FILE"
     done
 else
